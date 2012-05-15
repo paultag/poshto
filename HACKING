@@ -1,0 +1,25 @@
+Howdy!
+
+This document is how to hack on poŝto. Firstly, the word "poŝto" is Esperanto.
+
+Wiktionary defines the word as follows:
+
+     1. a public institution (usually government-run) to
+        deliver mail, post
+     2. mail distribution in general
+     3. one's mail, collectively
+
+We're using the 2ed or 3ed definition. Mostly the third.
+
+
+Some notes on Design
+====================
+
+ `Posto` object
+ ---------------
+
+    * This object contains all the bindings needed to talk to the IMAP server,
+      and how to appropriately store and cache emails locally, as well as how
+      to provide them to the front-end.
+
+    * You should talk through the Posto object when using Posto.
