@@ -115,9 +115,22 @@ Poshto.prototype.close = function(callback) {
     console.log("Closed out. Nice.");
     this.emit("logout");
     if ( callback ) {
-      callback(err);
+      callback(undefined);
     }
   });
+}
+
+/**
+ *
+ */
+Poshto.prototype.get_folders = function(callback) {
+  this.imap.getBoxes(function(err, boxen) {
+    var boxes = []
+    for ( i in boxen ) {
+      boxes.push(i);
+    }
+    callback(err, boxes);
+  }.bind(this));
 }
 
 /*   Callbacks, etc.   */

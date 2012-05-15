@@ -51,6 +51,25 @@ app.get('/headers', function(req, res){
 });
 
 /**
+ *
+ */
+app.get('/folders', function(req, res){
+  poshto.get_folders(function(err, boxen) {
+    if ( err ) {
+      res.send(JSON.stringify({
+        "err": err,
+        "data": {}
+      }));
+    } else {
+      res.send(JSON.stringify({
+        "err": undefined,
+        "data": boxen
+      }));
+    }
+  });
+});
+
+/**
  * Mailbox Open Endpoint
  */
 app.get('/open', function(req, res){
