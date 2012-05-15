@@ -15,11 +15,11 @@ We're using the 2ed or 3ed definition. Mostly the third.
 Some notes on Design
 ====================
 
- `Posto` object
+ `Poshto` object
  ---------------
 
     * This object contains all the bindings needed to talk to the IMAP server,
       and how to appropriately store and cache emails locally, as well as how
       to provide them to the front-end.
 
-    * You should talk through the Posto object when using Posto.
+    * You should talk through the Poshto object when using Poshto.
