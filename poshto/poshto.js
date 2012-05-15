@@ -5,17 +5,10 @@
  * with this application.
  */
 
-var util = require('util'),
-    events = require('events'),
-    ImapConnection = require('imap').ImapConnection,
-    Poshto;
-
-function cb_gate( err ) {
-    if ( err ) {
-        console.log("Error!: " + err);
-        process.exit(1);
-    }
-}
+var        util = require('util'),
+         events = require('events'),
+ ImapConnection = require('imap').ImapConnection,
+         Poshto;
 
 /**
  * Base Poshto Constructor.
@@ -37,27 +30,33 @@ Poshto = function( settings ) {
   this.imap.on("mail", this._handle_imap_mail);
 }
 
-/**
- * We'll set up the inherit from events
- */
+/* We'll set up the inherit from events */
 util.inherits( Poshto, events.EventEmitter );
 
 /**
  * This will set up and connect to a remote server.
  */
-Poshto.prototype.establish = function() {
+Poshto.prototype.establish = function(callback) {
   this.imap.connect(function(err) {
-    cb_gate(err);
+    if ( err && callback ) {
+      return callback(err);
+    }
+
     this.emit("connection");
+    if ( callback ) {
+      callback();
+    }
   }.bind(this));
 }
 
 /**
  * This will connect to a MailBox.
  */
-Poshto.prototype.open_folder = function( folder ) {
+Poshto.prototype.open_folder = function( folder, callback ) {
   this.imap.openBox(folder, false, function(err, box) {
-    cb_gate(err);
+    if ( err && callback ) {
+      return callback(err);
+    }
     this._folder = folder;
     this.mailbox[folder] = {
       "name": folder,
@@ -65,9 +64,14 @@ Poshto.prototype.open_folder = function( folder ) {
       "validity": this.imap._state.box.validity
     }
     this.imap.search(["ALL"], function(err, messages) {
-      cb_gate(err);
+      if ( err && callback ) {
+        return callback(err);
+      }
       this.mailbox[folder].mails = messages;
       this.emit("folder-opened", folder, box);
+      if ( callback ) {
+        callback();
+      }
     }.bind(this));
   }.bind(this))
 }
@@ -93,18 +97,26 @@ Poshto.prototype.get_headers = function(messages, callback) {
   });
   fetch.on('end', function() {
     this.emit("downloaded-all-headers", messages);
-    callback(msgs);
+    if ( callback ) {
+      callback(undefined, msgs);
+    }
   });
 }
 
 /**
  * Close out the everything
  */
-Poshto.prototype.close = function() {
+Poshto.prototype.close = function(callback) {
   this.imap.logout(function(err) {
-    cb_gate(err);
+    if ( err && callback ) {
+      return callback(err);
+    }
     // this.imap.close();
     console.log("Closed out. Nice.");
+    this.emit("logout");
+    if ( callback ) {
+      callback(err);
+    }
   });
 }
 
@@ -115,7 +127,7 @@ Poshto.prototype.close = function() {
  */
 Poshto.prototype._handle_imap_mail = function(numnew) {
   /* numnew is the number of *new* mails in the current box. */
-  console.log("New Mail");
+  this.emit("mail", newmails); /* Basically, pass through */
 }
 
 exports.Poshto = Poshto;

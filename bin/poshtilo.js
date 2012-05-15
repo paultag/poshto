@@ -4,33 +4,86 @@
  * conditions of the Expat license, a copy of which you should have recieved
  * with this application. */
 
-var Poshto = require("poshto").Poshto,
-    fs = require("fs"),
-    settings = JSON.parse(fs.readFileSync(process.argv[2])),
-    folder = "INBOX",
-    poshto;
+var express = require("express"),
+     Poshto = require("poshto").Poshto,
+         fs = require("fs"),
+     appdir = process.env.HOME + "/.poshto",
+   settings,
+     poshto,
+       port,
+        app;
+
+function get_settings_file(account_name) {
+  var file = appdir + "/conf/" + account_name + ".json";
+  return file;
+}
+
+settings = JSON.parse(
+    fs.readFileSync(get_settings_file(process.argv[2])));
+
+port     = settings.webserver_port
+if ( ! port ) {
+  port = 3000;
+}
 
 poshto = new Poshto(settings);
+app    = express.createServer();
 
-poshto.on("connection", function(){
-  console.log("Connected.");
-  this.open_folder(folder);
+/**
+ * Fetch the headers for a given email
+ */
+app.get('/headers', function(req, res){
+  var mid = req.query['id'];
+  poshto.get_headers(mid, function(err, msgs) {
+    console.log("Sending headers for " + mid);
+    if ( err ) {
+      res.send(JSON.stringify({
+        "err": err,
+        "data": {}
+      }));
+    } else {
+      res.send(JSON.stringify({
+        "err": undefined,
+        "data": msgs
+      }));
+    }
+  });
 });
 
-poshto.on("folder-opened", function(name, box) {
-  var mails = (poshto.mailbox[folder].mails),
-      tmail = mails[0];
-
-  console.log("Opened: " + name);
-  console.log("Testing " + tmail);
-
-  this.get_headers(tmail, function(headers){
-    console.log(headers[tmail].headers);
-    this.close();
-  }.bind(this));
+/**
+ * Mailbox Open Endpoint
+ */
+app.get('/open', function(req, res){
+  var mailbox = req.query['mailbox'];
+  /* Check to see if it's already open. */
+  if ( poshto._folder == mailbox ) {
+    return res.send(JSON.stringify({
+      "err": undefined,
+      "data": poshto.mailbox[mailbox].mails,
+      // "cache": true
+    }));
+  }
+  console.log("Opening: " + mailbox);
+  poshto.open_folder(mailbox, function(err) {
+    if ( err ) {
+      res.send(JSON.stringify({
+        "err": err,
+        "data": {}
+      }));
+    } else {
+      res.send(JSON.stringify({
+        "err": undefined,
+        "data": poshto.mailbox[mailbox].mails
+      }));
+    }
+  });
 });
 
 /* Alright. Time to connect. */
-poshto.establish();
+console.log("Starting up...");
+poshto.establish(function() {
+  app.listen(port);
+  console.log("Sitting on port " + port);
+});
 
 // vim: tabstop=2 expandtab shiftwidth=2 softtabstop=2
