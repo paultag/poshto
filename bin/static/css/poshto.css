@@ -18,6 +18,13 @@ body {
     font-size:          1em;
 }
 
+.lecture {
+    margin-top:         3%;
+    width:              300px;
+    margin-left:        auto;
+    margin-right:       auto;
+}
+
 .options {
-    margin-top:         10%;
+    margin-top:         5%;
 }
