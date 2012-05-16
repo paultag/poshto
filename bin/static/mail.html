@@ -17,7 +17,7 @@ $(document).ready(function() {
         for ( i in payload ) {
             var name = payload[i];
         $("#folders").append(
-            "<div class = 'folder' id = 'folder-'" + name + "' >" +
+            "<div class = 'folder' folder='" + name + "' >" +
             name +
             "</div>");
         }
