@@ -1,0 +1,23 @@
+body {
+    background-color:   #ECECEC;
+    font-family:        Futura;
+}
+
+.welcome-splash {
+    margin-top:         30%;
+    text-align:         center;
+}
+
+.headline {
+    font-size:          3em;
+    font-weight:        bold;
+}
+
+.subtext {
+    margin-top:         10px;
+    font-size:          1em;
+}
+
+.options {
+    margin-top:         10%;
+}
