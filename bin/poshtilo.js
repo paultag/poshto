@@ -29,6 +29,11 @@ if ( ! port ) {
 poshto = new Poshto(settings);
 app    = express.createServer();
 
+app.use("/static", express.static(__dirname + '/static'));
+app.get('/', function(req, res){
+  res.redirect('/static/mail.html');
+});
+
 /**
  * Fetch the headers for a given email
  */
