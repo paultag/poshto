@@ -5,27 +5,18 @@
         <link rel="stylesheet" href = "css/bootstrap.css" ></link>
         <link rel="stylesheet" href = "css/poshto.css" ></link>
         <script src="js/jquery.min.js" type="text/javascript"></script>
-        <script type="text/javascript" >
-$(document).ready(function() {
-    var boxen;
-    boxen = $.getJSON("/folders", function(data){
-        var payload = data.data;
-        if ( data.err ) {
-            /* Handle error condition */
-            return;
-        }
-        for ( i in payload ) {
-            var name = payload[i];
-        $("#folders").append(
-            "<div class = 'folder' folder='" + name + "' >" +
-            name +
-            "</div>");
-        }
-    });
-});
-        </script>
     </head>
     <body>
-        <div id = 'folders' ></div>
+        <div class = 'mail-ui' >
+            <h1>Poŝto <small>(It's Mail!)</small></h1>
+            <div id = 'folders' >
+                <ul>
+                    <li>Inbox</li>
+                    <li>Trash</li>
+                    <li>All Mail</li>
+                    <li>Follow Up</li>
+                </ul>
+            </div>
+        </div>
     </body>
 </html>

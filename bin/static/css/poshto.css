@@ -3,6 +3,14 @@ body {
     font-family:        Futura;
 }
 
+h1 {
+    border-bottom:      1px solid #CCCCCC;
+    width:              90%;
+    padding-left:       5%;
+    margin-bottom:      10px;
+}
+
+/* Mostly for the welcome screen (index.html) */
 .welcome-splash {
     position:           absolute;
     top:                0;
@@ -10,7 +18,7 @@ body {
     left:               0;
     right:              0;
     margin:             auto;
-    height:             240px;
+    height:             500px;
     width:              70%;
     text-align:         center;
 }
@@ -35,4 +43,27 @@ body {
 
 .options {
     margin-top:         5%;
+}
+
+/* Mostly for mail (mail.html) */
+.mail-ui {
+    position:           absolute;
+    top:                0;
+    bottom:             0;
+    left:               0;
+    right:              0;
+    margin:             auto;
+    height:             90%;
+    width:             90%;
+    background-color:  #FFFFFF;
+    padding:           20px;
+    border:            1px solid #CCCCCC;
+}
+
+#folders {
+
+}
+
+#folders li {
+    list-style:         none;
 }
