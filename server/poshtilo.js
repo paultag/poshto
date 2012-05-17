@@ -4,14 +4,16 @@
  * conditions of the Expat license, a copy of which you should have recieved
  * with this application. */
 
-var express = require("express"),
-     Poshto = require("poshto").Poshto,
-         fs = require("fs"),
-     appdir = process.env.HOME + "/.poshto",
-   settings,
-     poshto,
-       port,
-        app;
+var socketio = require('socket.io'),
+     express = require("express"),
+      Poshto = require("poshto").Poshto,
+          fs = require("fs"),
+      appdir = process.env.HOME + "/.poshto",
+    settings,
+      poshto,
+        port,
+         app,
+          io;
 
 function get_settings_file(account_name) {
   var file = appdir + "/conf/" + account_name + ".json";
@@ -21,87 +23,21 @@ function get_settings_file(account_name) {
 settings = JSON.parse(
     fs.readFileSync(get_settings_file(process.argv[2])));
 
-port     = settings.webserver_port
+port = settings.webserver_port
 if ( ! port ) {
   port = 3000;
 }
 
 poshto = new Poshto(settings);
 app    = express.createServer();
+io     = socketio.listen(app);
 
 app.use("/static", express.static(__dirname + '/static'));
 app.get('/', function(req, res){
   res.redirect('/static/index.html');
 });
 
-/**
- * Fetch the headers for a given email
- */
-app.get('/headers', function(req, res){
-  var mid = req.query['id'];
-  poshto.get_headers(mid, function(err, msgs) {
-    console.log("Sending headers for " + mid);
-    if ( err ) {
-      res.send(JSON.stringify({
-        "err": err,
-        "data": {}
-      }));
-    } else {
-      res.send(JSON.stringify({
-        "err": undefined,
-        "data": msgs
-      }));
-    }
-  });
-});
 
-/**
- *
- */
-app.get('/folders', function(req, res){
-  poshto.get_folders(function(err, boxen) {
-    if ( err ) {
-      res.send(JSON.stringify({
-        "err": err,
-        "data": {}
-      }));
-    } else {
-      res.send(JSON.stringify({
-        "err": undefined,
-        "data": boxen
-      }));
-    }
-  });
-});
-
-/**
- * Mailbox Open Endpoint
- */
-app.get('/open', function(req, res){
-  var mailbox = req.query['mailbox'];
-  /* Check to see if it's already open. */
-  if ( poshto._folder == mailbox ) {
-    return res.send(JSON.stringify({
-      "err": undefined,
-      "data": poshto.mailbox[mailbox].mails,
-      // "cache": true
-    }));
-  }
-  console.log("Opening: " + mailbox);
-  poshto.open_folder(mailbox, function(err) {
-    if ( err ) {
-      res.send(JSON.stringify({
-        "err": err,
-        "data": {}
-      }));
-    } else {
-      res.send(JSON.stringify({
-        "err": undefined,
-        "data": poshto.mailbox[mailbox].mails
-      }));
-    }
-  });
-});
 
 /* Alright. Time to connect. */
 console.log("Starting up...");
