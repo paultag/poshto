@@ -44,17 +44,21 @@ function update(socket) {
 }
 
 io.sockets.on('connection', function(socket) {
-  console.log("New client.");
-  update(socket);
   socket.on('open', function(folder) {
-    console.log("Opening mailbox " + folder);
     poshto.open_folder(folder, function() {
-      console.log("Mailbox Open");
       update(socket);
     }.bind(this));
   }.bind(this));
-});
 
+
+  socket.on('header-request', function(msgid) {
+    console.log("Issuing a request for " + msgid);
+    poshto.get_headers(msgid, function(err, msg) {
+      console.log("Got headers for " + msg);
+      socket.emit('mail', msg[msgid]);
+    }.bind(this));
+  }.bind(this));
+});
 
 /* Alright. Time to connect. */
 

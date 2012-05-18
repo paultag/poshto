@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Poŝto</title>
+        <title>poŝto</title>
         <link rel="stylesheet" href = "css/bootstrap.css" ></link>
         <link rel="stylesheet" href = "css/poshto.css" ></link>
         <script src="js/jquery.min.js" type="text/javascript"></script>
@@ -10,14 +10,34 @@
     </head>
     <body>
         <div class = 'mail-ui' >
-            <h1>Poŝto <small>(It's Mail!)</small></h1>
-            <div id = 'folders' >
-                <ul>
-                    <li>Inbox</li>
-                    <li>Trash</li>
-                    <li>All Mail</li>
-                    <li>Follow Up</li>
-                </ul>
+            <h1>poŝto <small>(It's Mail!)</small></h1>
+            <div class = 'container-fluid' >
+                <div class = 'row-fluid' >
+                    <div class = 'span3' >
+                        <div id = 'folders' class = 'well sidebar-nav' >
+                            <ul class = "nav nav-list">
+                                <li class = "nav-header" >Folders</li>
+                                <li>Inbox</li>
+                                <li>Trash</li>
+                                <li>All Mail</li>
+                                <li>Follow Up</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class = 'span9' >
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Subject</th>
+                                    <th>From</th>
+                                    <th>Date</th>
+                                </tr>
+                            </thead>
+                            <tbody id = 'emails'>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
     </body>

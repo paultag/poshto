@@ -47,23 +47,10 @@ h1 {
 
 /* Mostly for mail (mail.html) */
 .mail-ui {
-    position:           absolute;
-    top:                0;
-    bottom:             0;
-    left:               0;
-    right:              0;
     margin:             auto;
-    height:             90%;
+    margin-top:         5px;
     width:              90%;
     background-color:   #FFFFFF;
     padding:            20px;
     border:             1px solid #CCCCCC;
-}
-
-#folders {
-
-}
-
-#folders li {
-    list-style:         none;
 }

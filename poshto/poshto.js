@@ -93,13 +93,13 @@ Poshto.prototype.get_headers = function(messages, callback) {
     msg.on('end', function() {
       msgs[msg.id] = msg;
       this.emit("downloaded-headers", msg.id, msg);
+      if ( callback ) {
+        callback(undefined, msgs);
+      }
     });
   });
   fetch.on('end', function() {
     this.emit("downloaded-all-headers", messages);
-    if ( callback ) {
-      callback(undefined, msgs);
-    }
   });
 }
 
@@ -140,7 +140,7 @@ Poshto.prototype.get_folders = function(callback) {
  */
 Poshto.prototype._handle_imap_mail = function(numnew) {
   /* numnew is the number of *new* mails in the current box. */
-  this.emit("mail", newmails); /* Basically, pass through */
+  // this.emit("mail", newmails); /* Basically, pass through */
 }
 
 exports.Poshto = Poshto;
