@@ -37,14 +37,27 @@ app.get('/', function(req, res){
   res.redirect('/static/index.html');
 });
 
-io.sockets.on('connection', function (socket) {
-  socket.emit('news', { hello: 'world' });
-    socket.on('my other event', function (data) {
-    console.log(data);
-  });
+/* OK. Webserver kruft is all set. Let's get to the logic. */
+
+function update(socket) {
+  socket.emit('update', poshto.mailbox);
+}
+
+io.sockets.on('connection', function(socket) {
+  console.log("New client.");
+  update(socket);
+  socket.on('open', function(folder) {
+    console.log("Opening mailbox " + folder);
+    poshto.open_folder(folder, function() {
+      console.log("Mailbox Open");
+      update(socket);
+    }.bind(this));
+  }.bind(this));
 });
 
+
 /* Alright. Time to connect. */
+
 console.log("Starting up...");
 poshto.establish(function() {
   app.listen(port);
