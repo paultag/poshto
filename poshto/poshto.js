@@ -97,7 +97,7 @@ Poshto.prototype.get_headers = function(messages, callback) {
   });
   fetch.on('end', function() {
     if ( callback ) {
-      callback(undefined, messages);
+      callback(undefined, msgs);
     }
   });
 }
