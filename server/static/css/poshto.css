@@ -54,10 +54,10 @@ h1 {
     right:              0;
     margin:             auto;
     height:             90%;
-    width:             90%;
-    background-color:  #FFFFFF;
-    padding:           20px;
-    border:            1px solid #CCCCCC;
+    width:              90%;
+    background-color:   #FFFFFF;
+    padding:            20px;
+    border:             1px solid #CCCCCC;
 }
 
 #folders {
