@@ -50,7 +50,6 @@ io.sockets.on('connection', function(socket) {
     }.bind(this));
   }.bind(this));
 
-
   socket.on('header-request', function(msgid) {
     console.log("Issuing a request for " + msgid);
     poshto.get_headers(msgid, function(err, msg) {

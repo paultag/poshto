@@ -93,13 +93,13 @@ Poshto.prototype.get_headers = function(messages, callback) {
     msg.on('end', function() {
       msgs[msg.id] = msg;
       this.emit("downloaded-headers", msg.id, msg);
-      if ( callback ) {
-        callback(undefined, msgs);
-      }
     });
   });
   fetch.on('end', function() {
     this.emit("downloaded-all-headers", messages);
+    if ( callback ) {
+      callback(undefined, messages);
+    }
   });
 }
 
