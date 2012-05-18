@@ -7,5 +7,5 @@ if [ $# -lt 1 ]; then
 fi
 
 cd server
-sleep 5 && chromium --app=http://localhost:3000 --single-process &
+sleep 5 && chromium --app=http://localhost:3000 &
 node poshtilo.js $1
