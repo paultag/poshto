@@ -1,0 +1,11 @@
+#!/bin/sh
+set -e
+
+if [ $# -lt 1 ]; then
+    echo "Usage error. Please note which account you'd like to use."
+    exit 1
+fi
+
+cd server
+sleep 5 && chromium --app=http://localhost:3000 --single-process &
+node poshtilo.js $1
