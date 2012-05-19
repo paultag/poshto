@@ -24,18 +24,19 @@ socket.on('update', function(e) {
 
 socket.on('mail', function(mail) {
   /* OK. Let's add it to the table */
-  $("#coverover").hide();
-  var subject, from, date, new_email, headers;
-  headers = mail.headers;
+  $("#coverover").fadeOut(function() {
+    var subject, from, date, new_email, headers;
+    headers = mail.headers;
 
-  subject = $('<td>'); subject.text(headers.subject[0]);
-     from = $('<td>');    from.text(headers.from[0]);
-     date = $('<td>');    date.text(headers.date[0]);
+    subject = $('<td>'); subject.text(headers.subject[0]);
+       from = $('<td>');    from.text(headers.from[0]);
+       date = $('<td>');    date.text(headers.date[0]);
 
-  new_email = $("<tr>").append(subject).append(from).append(date);
-  new_email.hide();
-  $("#emails").prepend(new_email);
-  new_email.fadeIn();
+    new_email = $("<tr>").append(subject).append(from).append(date);
+    new_email.hide();
+    $("#emails").prepend(new_email);
+    new_email.fadeIn();
+  });
 });
 
 // vim: tabstop=2 expandtab shiftwidth=2 softtabstop=2
