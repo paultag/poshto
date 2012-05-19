@@ -6,6 +6,7 @@
 
 var        util = require('util'),
          events = require('events'),
+          Cache = require('./cache').PoshtoCache,
  ImapConnection = require('imap').ImapConnection,
          Poshto;
 
@@ -17,6 +18,7 @@ Poshto = function( settings ) {
     return new Poshto( settings );
   }
   this.mailbox = {}
+  this.cache = new Cache(settings);
   /* Alright. Let's rock. */
   this.imap = new ImapConnection({
     'host': settings.host,
