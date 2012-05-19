@@ -19,10 +19,7 @@ socket.on('connect', function() {
 socket.on('update', function(e) {
   /* OK. Let's get the initial state. */
   email = e;
-  for ( i in e.INBOX.mails ) {
-    var id = e.INBOX.mails[i];
-    socket.emit("header-request", id);
-  }
+  socket.emit("headers", e.INBOX.mails);
 });
 
 socket.on('mail', function(mail) {

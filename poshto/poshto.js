@@ -2,8 +2,7 @@
  *
  * Copyright (c) Paul Tagliamonte <tag@pault.ag>, 2012 under the terms and
  * conditions of the Expat license, a copy of which you should have recieved
- * with this application.
- */
+ * with this application. */
 
 var        util = require('util'),
          events = require('events'),
