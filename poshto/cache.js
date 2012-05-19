@@ -16,20 +16,20 @@ var util = require('util'),
  *        193848/ (validity)
  *          23    (ID)
  *           +--> Symbolic Link to real header
- *  headers/
- *    a/
- *      b/
- *        c/
- *          abc123@foo.domain.tld.json
+ *    headers/
+ *      a/
+ *        b/
+ *          c/
+ *            abc123@foo.domain.tld.json
  *
- *  content/
- *    a/
- *      b/
- *        c/
- *          abc123@foo.domain.tld/
- *            part1
- *            part2
- *            part2.1
+ *    content/
+ *      a/
+ *        b/
+ *          c/
+ *            abc123@foo.domain.tld/
+ *              part1
+ *              part2
+ *              part2.1
  */
 
 /**
