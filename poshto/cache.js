@@ -16,6 +16,7 @@ var util = require('util'),
  *        193848/ (validity)
  *          23    (ID)
  *           +--> Symbolic Link to real header
+ *
  *    headers/
  *      a/
  *        b/
