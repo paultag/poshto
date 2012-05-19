@@ -24,6 +24,7 @@ socket.on('update', function(e) {
 
 socket.on('mail', function(mail) {
   /* OK. Let's add it to the table */
+  $("#coverover").hide();
   var subject, from, date, new_email, headers;
   headers = mail.headers;
 

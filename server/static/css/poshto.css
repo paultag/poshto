@@ -46,6 +46,17 @@ h1 {
 }
 
 /* Mostly for mail (mail.html) */
+#coverover {
+    background-image:   url(../imgs/bg-xp-b.png);
+    position:           fixed;
+    top:                0px;
+    bottom:             0px;
+    right:              0px;
+    left:               0px;
+    color:              #FFFFFF;
+    font-size:          2em;
+}
+
 .mail-ui {
     margin:             auto;
     margin-top:         5px;
