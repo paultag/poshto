@@ -5,7 +5,9 @@
  * with this application. */
 
 var util = require('util'),
-  events = require('events');
+  events = require('events'),
+  mkdirp = require('mkdirp'),
+cachedir = process.env.HOME + "/.poshto/cache";
 
 /**
  * Cache Layout (etc):
@@ -40,12 +42,16 @@ PoshtoCache = function( settings ) {
   if ( ! ( this instanceof PoshtoCache ) ) {
     return new PoshtoCache( settings );
   }
+  this.username = settings.username;
+  this.mailbox  = settings.mailbox;
+  this.cachedir = cachedir + "/" + this.username;
+  mkdirp.sync(this.cachedir);
 }
 
 /* We'll set up the inherit from events */
 util.inherits( PoshtoCache, events.EventEmitter );
 
-PoshtoCache.prototype.get_headers = function(message_id) {
+PoshtoCache.prototype.get_header = function(message_id) {
 }
 
 exports.PoshtoCache = PoshtoCache;
