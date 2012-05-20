@@ -28,7 +28,9 @@ Poshto = function( settings ) {
     'username': settings.username
   });
   /* IMAP Callbacks */
-  this.imap.on("mail", this._handle_imap_mail);
+  this.imap.on("mail", function(numnew) {
+    this._handle_imap_mail(numnew);
+  }.bind(this));
 }
 
 /* We'll set up the inherit from events */
@@ -140,7 +142,15 @@ Poshto.prototype.get_folders = function(callback) {
  */
 Poshto.prototype._handle_imap_mail = function(numnew) {
   /* numnew is the number of *new* mails in the current box. */
-  // this.emit("mail", newmails); /* Basically, pass through */
+  var msgbase = parseInt(this.imap._state.box._uidnext),
+      total = [];
+  numnew = parseInt(numnew);
+
+  for ( i = msgbase; i < (msgbase + numnew); ++i ) {
+    total.push(i);
+  }
+
+  this.emit('mail', total);
 }
 
 exports.Poshto = Poshto;

@@ -50,6 +50,14 @@ io.sockets.on('connection', function(socket) {
     }.bind(this));
   }.bind(this));
 
+  poshto.on('mail', function(msgids) {
+    poshto.get_headers(msgids, function(err, msg) {
+      for ( i in msg ) {
+        socket.emit('mail', msg[i]);
+      }
+    });
+  });
+
   socket.on('headers', function(msgids) {
     console.log("Issuing a request for " + msgids);
     poshto.get_headers(msgids, function(err, msg) {
