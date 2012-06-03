@@ -6,7 +6,6 @@
 
 var        util = require('util'),
          events = require('events'),
-          Cache = require('./cache').PoshtoCache,
  ImapConnection = require('imap').ImapConnection,
          Poshto;
 
@@ -18,13 +17,12 @@ Poshto = function( settings ) {
     return new Poshto( settings );
   }
   this.mailbox = {}
-  this.cache = new Cache(settings);
   /* Alright. Let's rock. */
   this.imap = new ImapConnection({
-    'host': settings.host,
+    'host':     settings.host,
     'password': settings.password,
-    'port': settings.port,
-    'secure': settings.secure,
+    'port':     settings.port,
+    'secure':   settings.secure,
     'username': settings.username
   });
   /* IMAP Callbacks */
@@ -50,59 +48,6 @@ Poshto.prototype.establish = function(callback) {
       callback();
     }
   }.bind(this));
-}
-
-/**
- * This will connect to a MailBox.
- */
-Poshto.prototype.open_folder = function( folder, callback ) {
-  this.imap.openBox(folder, false, function(err, box) {
-    if ( err && callback ) {
-      return callback(err);
-    }
-    this._folder = folder;
-    this.mailbox[folder] = {
-      "name": folder,
-      "box":  box,
-      "validity": this.imap._state.box.validity
-    }
-    this.imap.search(["ALL"], function(err, messages) {
-      if ( err && callback ) {
-        return callback(err);
-      }
-      this.mailbox[folder].mails = messages;
-      this.emit("folder-opened", folder, box);
-      if ( callback ) {
-        callback();
-      }
-    }.bind(this));
-  }.bind(this))
-}
-
-/**
- * This will fetch a mail's header
- */
-Poshto.prototype.get_headers = function(messages, callback) {
-  var fetch = this.imap.fetch(
-        messages,
-        {
-          request: {
-            headers: true
-          }
-        }
-      ),
-      msgs = {};
-  fetch.on('message', function(msg) {
-    msg.on('end', function() {
-      msgs[msg.id] = msg;
-      this.emit("downloaded-headers", msg.id, msg);
-    });
-  });
-  fetch.on('end', function() {
-    if ( callback ) {
-      callback(undefined, msgs);
-    }
-  });
 }
 
 /**

@@ -39,34 +39,11 @@ app.get('/', function(req, res){
 
 /* OK. Webserver kruft is all set. Let's get to the logic. */
 
-function update(socket) {
-  socket.emit('update', poshto.mailbox);
-}
-
 io.sockets.on('connection', function(socket) {
   socket.on('open', function(folder) {
-    poshto.open_folder(folder, function() {
-      update(socket);
-    }.bind(this));
+    console.log("Socket open");
   }.bind(this));
-
-  poshto.on('mail', function(msgids) {
-    poshto.get_headers(msgids, function(err, msg) {
-      for ( i in msg ) {
-        socket.emit('mail', msg[i]);
-      }
-    });
-  });
-
-  socket.on('headers', function(msgids) {
-    console.log("Issuing a request for " + msgids);
-    poshto.get_headers(msgids, function(err, msg) {
-      console.log("Got headers for " + msg);
-      for ( i in msg ) {
-        socket.emit('mail', msg[i]);
-      }
-    }.bind(this));
-  }.bind(this));
+  /* [...] */
 });
 
 /* Alright. Time to connect. */
