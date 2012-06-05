@@ -68,7 +68,7 @@ Poshto.prototype.close = function(callback) {
 }
 
 /**
- *
+ * This will return all the folders IMAP knows about.
  */
 Poshto.prototype.get_folders = function(callback) {
   this.imap.getBoxes(function(err, boxen) {
@@ -95,7 +95,7 @@ Poshto.prototype._handle_imap_mail = function(numnew) {
     total.push(i);
   }
 
-  this.emit('mail', total);
+  /* Fetch headers, emit new mail for each message. */
 }
 
 exports.Poshto = Poshto;
