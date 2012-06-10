@@ -5,6 +5,7 @@
  * with this application. */
 
 var Poshto = require("poshto").Poshto,
+   maildir = process.env.HOME + "/poshto",
     appdir = process.env.HOME + "/.poshto",
         fs = require("fs"),
   settings,
@@ -12,6 +13,11 @@ var Poshto = require("poshto").Poshto,
 
 function get_settings_file(account_name) {
   var file = appdir + "/conf/" + account_name + ".json";
+  return file;
+}
+
+function get_mailbox_dir(account_name) {
+  var file = maildir + "/" + account_name;
   return file;
 }
 
