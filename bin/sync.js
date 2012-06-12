@@ -15,7 +15,16 @@ var Poshto = require("poshto").Poshto,
 
 poshto.connect({
   "success": function() {
-    console.log("Connected.");
+    console.log("Connected. Opening inbox");
+    poshto.open({
+      "success": function(folder) {
+        console.log("Inbox opened: " + folder);
+      },
+      "failure": function(err) {
+        console.log("Error opening folder: " + err)
+      },
+      "folder": "INBOX"
+    });
   },
   "failure": function(err) {
     console.log("Error connecting: " + err);

@@ -24,7 +24,8 @@ function Poshto( settings ) {
   if ( !( this instanceof Poshto ) ) {
     return new Poshto( settings );
   }
-  this.settings = settings
+  this.settings = settings;
+  this.mailbox = {}
   this.imap = new ImapConnection({
     'host': settings.host,
     'password': settings.password,
@@ -38,10 +39,37 @@ function Poshto( settings ) {
 // Inherit event api
 util.inherits( Poshto, events.EventEmitter );
 
+/**
+ *
+ */
 Poshto.prototype.connect = function(args) {
   this.imap.connect(function(err) {
     do_callback(args, err, undefined);
   });
+}
+
+/**
+ *
+ */
+Poshto.prototype.open = function(args) {
+  var folder = args.folder;
+  this.imap.openBox(folder, false, function(err, box) {
+    if ( err ) {
+      return do_callback(args, err, undefined);
+    }
+    this.mailbox[folder] = {
+      "name": folder,
+      "box": box,
+      "validity": this.imap._state.box.validity
+    }
+    this.imap.search(["ALL"], function(err, messages) {
+      if ( err ) {
+        return do_callback(args, err, undefined);
+      }
+      this.mailbox[folder].mails = messages;
+      do_callback(args, err, this.mailbox[folder]);
+    }.bind(this));
+  }.bind(this));
 }
 
 module.exports.Poshto = Poshto;
