@@ -17,6 +17,21 @@ function do_callback(args, err, payload) {
   }
 }
 
+function clean_message_id(message_id) {
+  if ( message_id.charAt(0) == "<" &&
+       message_id.charAt(message_id.length - 1) == ">"
+ ) {
+    message_id = message_id.substr(1, message_id.length - 2);
+ }
+  return message_id;
+}
+
+function clean_message_ids(headers) {
+  headers.headers['message-id'] = clean_message_id(
+      headers.headers['message-id'][0]);
+  return headers;
+}
+
 /**
  * Base constructor.
  */
@@ -53,22 +68,54 @@ Poshto.prototype.connect = function(args) {
  */
 Poshto.prototype.open = function(args) {
   var folder = args.folder;
+
   this.imap.openBox(folder, false, function(err, box) {
     if ( err ) {
       return do_callback(args, err, undefined);
     }
+
     this.mailbox[folder] = {
       "name": folder,
       "box": box,
       "validity": this.imap._state.box.validity
     }
+
     this.imap.search(["ALL"], function(err, messages) {
       if ( err ) {
         return do_callback(args, err, undefined);
       }
       this.mailbox[folder].mails = messages;
-      do_callback(args, err, this.mailbox[folder]);
+      this.emit("open", this.mailbox[folder]);
+      return do_callback(args, err, this.mailbox[folder]);
     }.bind(this));
+  }.bind(this));
+}
+
+/**
+ *
+ */
+Poshto.prototype.headers = function(args) {
+  var folder = args.folder,
+         ids = args.ids,
+       fetch = this.imap.fetch(ids, { "request": { "headers": true }}),
+    response = {
+      "folder": folder,
+      "msgs": []
+    };
+
+  fetch.on("message", function(msg) {
+    msg.on('end', function() {
+      msg = clean_message_ids(msg);
+      response.msgs.push(msg);
+      this.emit("message", {
+        "msg": msg,
+        "folder": folder
+      });
+    }.bind(this));
+  }.bind(this));
+
+  fetch.on("end", function() {
+    do_callback(args, undefined, response);
   }.bind(this));
 }
 
