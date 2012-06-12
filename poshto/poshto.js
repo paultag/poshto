@@ -4,8 +4,10 @@
  * conditions of the Expat license, a copy of which you should have recieved
  * with this application. */
 
-var util = require("util"),
-  events = require("events");
+var        util = require("util"),
+         events = require("events"),
+ ImapConnection = require('imap').ImapConnection;
+
 
 /**
  * Base constructor.
@@ -15,6 +17,13 @@ function Poshto( settings ) {
     return new Poshto( settings );
   }
   this.settings = settings
+  this.imap = new ImapConnection({
+    'host': settings.host,
+    'password': settings.password,
+    'port': settings.port,
+    'secure': settings.secure,
+    'username': settings.username
+  });
 }
 
 

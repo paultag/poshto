@@ -10,6 +10,9 @@ var Poshto = require("poshto").Poshto,
     config = dotcache + "/conf/" + account + ".json",
         fs = require("fs"),
   settings = JSON.parse(fs.readFileSync(config)),
-      port = ( settings.webserver_port ) ? settings.webserver_port : 3000;
+      port = ( settings.webserver_port ) ? settings.webserver_port : 3000,
+    poshto = Poshto(settings);
+
+console.log(poshto);
 
 // vim: tabstop=2 expandtab shiftwidth=2 softtabstop=2
