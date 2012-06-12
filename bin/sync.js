@@ -18,7 +18,7 @@ poshto.connect({
     console.log("Connected. Opening inbox");
     poshto.open({
       "success": function(folder) {
-        console.log("Inbox opened: " + folder);
+        console.log("Folder opened: " + folder.name);
       },
       "failure": function(err) {
         console.log("Error opening folder: " + err)
