@@ -13,6 +13,13 @@ var Poshto = require("poshto").Poshto,
       port = ( settings.webserver_port ) ? settings.webserver_port : 3000,
     poshto = Poshto(settings);
 
-console.log(poshto);
+poshto.connect({
+  "success": function() {
+    console.log("Connected.");
+  },
+  "failure": function(err) {
+    console.log("Error connecting: " + err);
+  }
+})
 
 // vim: tabstop=2 expandtab shiftwidth=2 softtabstop=2

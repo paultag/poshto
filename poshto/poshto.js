@@ -8,6 +8,14 @@ var        util = require("util"),
          events = require("events"),
  ImapConnection = require('imap').ImapConnection;
 
+function do_callback(args, err, payload) {
+  if ( args.failure && err ) {
+    return args.failure(err);
+  }
+  if ( args.success ) {
+    return args.success(payload);
+  }
+}
 
 /**
  * Base constructor.
@@ -30,8 +38,10 @@ function Poshto( settings ) {
 // Inherit event api
 util.inherits( Poshto, events.EventEmitter );
 
-Poshto.prototype.connect = function() {
-
+Poshto.prototype.connect = function(args) {
+  this.imap.connect(function(err) {
+    do_callback(args, err, undefined);
+  });
 }
 
 module.exports.Poshto = Poshto;
