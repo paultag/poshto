@@ -80,10 +80,16 @@ poshto.on("open", function(folder) {
   var folder_path = get_folder_folder(folder),
             mails = new sets.Set(folder.mails),
            exists,
-        to_delete;
+        to_delete,
+           curptr = folder_path + "/../current";
 
   mkdirp.sync(folder_path);  /* Ensure we have a directory to link in. */
-  console.log(folder_path);
+  cur_stat = fs.stat(curptr, function(err, stat) {
+    if ( err == undefined ) {
+      fs.unlinkSync(curptr);
+    }
+    fs.symlinkSync(folder_path, curptr);
+  });
 
   exists = new sets.Set(fs.readdirSync(folder_path));
 
