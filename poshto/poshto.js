@@ -78,8 +78,20 @@ util.inherits( Poshto, events.EventEmitter );
  */
 Poshto.prototype.connect = function(args) {
   this.imap.connect(function(err) {
-    do_callback(args, err, undefined);
-  });
+    if ( err ) {
+      do_callback(args, err, undefined);
+    }
+    this.boxes({
+      "success": function(obj) {
+        console.log("I got a listing of directories");
+        do_callback(args, undefined, obj);
+      },
+      "failure": function(err) {
+        console.log("Eeep, no folders.");
+        do_callback(args, err, undefined);
+      }
+    });
+  }.bind(this));
 }
 
 /**
@@ -142,6 +154,13 @@ Poshto.prototype.headers = function(args) {
 
   fetch.on("end", function() {
     do_callback(args, undefined, response);
+  }.bind(this));
+}
+
+Poshto.prototype.boxes = function(args) {
+  this.imap.getBoxes(function(err, obj) {
+    this.boxes = obj;
+    do_callback(args, err, obj);
   }.bind(this));
 }
 
