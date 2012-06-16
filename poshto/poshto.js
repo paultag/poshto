@@ -8,11 +8,17 @@ var        util = require("util"),
          events = require("events"),
  ImapConnection = require('imap').ImapConnection;
 
+/**
+ * handle issuing the callback given args, the success payload
+ * and the error payload. This will let us transparently call
+ * the failure payload if failure is set, so we don't have to
+ * catch anything.
+ */
 function do_callback(args, err, payload) {
   if ( args.failure && err ) {
     return args.failure(err);
   }
-  if ( args.success ) {
+  if ( args.success && payload ) {
     return args.success(payload);
   }
 }
