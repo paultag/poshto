@@ -66,6 +66,7 @@ function Poshto( settings ) {
   });
   this.imap.poshto = this;
   this.imap.on("mail", this._imap_mail);
+  this.imap.on("deleted", this._imap_deleted);
 }
 
 
@@ -151,6 +152,16 @@ Poshto.prototype._imap_mail = function(mails) {
   this.poshto._refresh({
     "folder": this.poshto.cur_folder
   });
+}
+
+/**
+ * IMAP deleted mail callback
+ */
+Poshto.prototype._imap_deleted = function(mails) {
+  this.poshto._refresh({
+    "folder": this.poshto.cur_folder
+  });
+  this.poshto.emit("delete", this.poshto.mailbox[this.poshto.cur_folder])
 }
 
 module.exports.Poshto = Poshto;

@@ -80,12 +80,37 @@ poshto.on("message", function(payload) {
   });
 });
 
+function cleanup(args) {
+  var to_delete,
+      to_create,
+      folder_path = args.folder_path,
+      mails = args.mails,
+      exists;
+
+  exists = new sets.Set(fs.readdirSync(folder_path));
+  to_delete = (exists.difference(mails).array());
+  to_create = (mails.difference(exists).array());
+
+  for ( i in to_delete ) {
+    var file_id = to_delete[i],
+           file = folder_path + "/" + file_id;
+    fs.unlink(file);
+  }
+
+  return {
+    "to_create": to_create,
+    "to_delete": to_delete
+  };
+}
+
 poshto.on("open", function(folder) {
   var folder_path = get_folder_folder(folder),
             mails = new sets.Set(folder.mails),
-           exists,
+           curptr = folder_path + "/../current",
         to_delete,
-           curptr = folder_path + "/../current";
+        to_create,
+           exists,
+              cle;
 
   mkdirp.sync(folder_path);  /* Ensure we have a directory to link in. */
   cur_stat = fs.stat(curptr, function(err, stat) {
@@ -95,16 +120,12 @@ poshto.on("open", function(folder) {
     fs.symlinkSync(folder_path, curptr);
   });
 
-  exists = new sets.Set(fs.readdirSync(folder_path));
-
-  to_delete = (exists.difference(mails).array());
-  to_create = (mails.difference(exists).array());
-
-  for ( i in to_delete ) {
-    var file_id = to_delete[i],
-           file = folder_path + "/" + file_id;
-    fs.unlink(file);
-  }
+  cle = cleanup({
+    "folder_path": folder_path,
+    "mails": mails
+  });
+  to_create = cle.to_create;
+  to_delete = cle.to_delete;
 
   if ( to_create.length > 0 ) {
     poshto.headers({
@@ -115,6 +136,18 @@ poshto.on("open", function(folder) {
       }
     });
   }
+});
+
+poshto.on("delete", function(folder) {
+  console.log("Something's gone. ");
+
+  var folder_path = get_folder_folder(folder),
+            mails = new sets.Set(folder.mails);
+
+  cleanup({
+    "folder_path": folder_path,
+    "mails": mails
+  });
 });
 
 // vim: tabstop=2 expandtab shiftwidth=2 softtabstop=2
