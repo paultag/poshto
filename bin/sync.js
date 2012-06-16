@@ -96,8 +96,10 @@ poshto.on("open", function(folder) {
   to_delete = (exists.difference(mails).array());
   to_create = (mails.difference(exists).array());
 
+/*
   console.log("To Delete: " + to_delete);
   console.log("To Create: " + to_create);
+ */
 
   for ( i in to_delete ) {
     var file_id = to_delete[i],

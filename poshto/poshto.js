@@ -48,6 +48,8 @@ function Poshto( settings ) {
     'secure': settings.secure,
     'username': settings.username
   });
+  this.imap.poshto = this;
+  this.imap.on("mail", this._imap_mail);
 }
 
 
@@ -66,28 +68,34 @@ Poshto.prototype.connect = function(args) {
 /**
  *
  */
+Poshto.prototype._refresh = function(args) {
+  var folder = args.folder;
+  this.imap.search(["ALL"], function(err, messages) {
+    if ( err ) {
+      return do_callback(args, err, undefined);
+    }
+    this.mailbox[folder].mails = messages;
+    this.emit("open", this.mailbox[folder]);
+    return do_callback(args, err, this.mailbox[folder]);
+  }.bind(this));
+}
+
+/**
+ *
+ */
 Poshto.prototype.open = function(args) {
   var folder = args.folder;
-
   this.imap.openBox(folder, false, function(err, box) {
     if ( err ) {
       return do_callback(args, err, undefined);
     }
-
     this.mailbox[folder] = {
       "name": folder,
       "box": box,
       "validity": this.imap._state.box.validity
     }
-
-    this.imap.search(["ALL"], function(err, messages) {
-      if ( err ) {
-        return do_callback(args, err, undefined);
-      }
-      this.mailbox[folder].mails = messages;
-      this.emit("open", this.mailbox[folder]);
-      return do_callback(args, err, this.mailbox[folder]);
-    }.bind(this));
+    this.cur_folder = folder;
+    this._refresh(args);
   }.bind(this));
 }
 
@@ -117,6 +125,15 @@ Poshto.prototype.headers = function(args) {
   fetch.on("end", function() {
     do_callback(args, undefined, response);
   }.bind(this));
+}
+
+/**
+ *
+ */
+Poshto.prototype._imap_mail = function(mails) {
+  this.poshto._refresh({
+    "folder": this.poshto.cur_folder
+  });
 }
 
 module.exports.Poshto = Poshto;
