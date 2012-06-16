@@ -33,6 +33,7 @@ function get_mid_path(message) {
   return cache + "headers/" + get_mid_hash(message);
 }
 
+console.log("Attempting to log in...");
 poshto.connect({
   "success": function() {
     console.log("Connected. Opening inbox");
