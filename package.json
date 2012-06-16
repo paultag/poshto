@@ -10,8 +10,7 @@
         "simplesets": ">=0"
     },
     "description": "Sanity is slowly being restored to Email.",
-    "devDependencies": {
-    },
+    "devDependencies": {},
     "engines": {
         "node": "~0.6.13"
     },
@@ -29,7 +28,6 @@
         "type": "git",
         "url": "git://github.com/paultag/poshto.git"
     },
-    "scripts": {
-    },
-    "version": "0.1"
+    "scripts": {},
+    "version": "0.0.1"
 }
