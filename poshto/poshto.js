@@ -23,6 +23,11 @@ function do_callback(args, err, payload) {
   }
 }
 
+/**
+ * Clean up the message id, given a single ID. We'll strip out the
+ * leading ">" or trailing ">", as well as anything else we might need
+ * to do to it.
+ */
 function clean_message_id(message_id) {
   if ( message_id.charAt(0) == "<" &&
        message_id.charAt(message_id.length - 1) == ">"
@@ -32,6 +37,11 @@ function clean_message_id(message_id) {
   return message_id;
 }
 
+/**
+ * Clean all the message IDs in the headers -- for now we just take
+ * the first header and set it to the message-id of the whole mail.
+ * This behavior may change later.
+ */
 function clean_message_ids(headers) {
   headers.headers['message-id'] = clean_message_id(
       headers.headers['message-id'][0]);
@@ -39,7 +49,7 @@ function clean_message_ids(headers) {
 }
 
 /**
- * Base constructor.
+ * "constructor"
  */
 function Poshto( settings ) {
   if ( !( this instanceof Poshto ) ) {
@@ -63,7 +73,7 @@ function Poshto( settings ) {
 util.inherits( Poshto, events.EventEmitter );
 
 /**
- *
+ * Connect to the server.
  */
 Poshto.prototype.connect = function(args) {
   this.imap.connect(function(err) {
@@ -72,7 +82,8 @@ Poshto.prototype.connect = function(args) {
 }
 
 /**
- *
+ * Scan the current folder for any new messages, and emit what
+ * we find.
  */
 Poshto.prototype._refresh = function(args) {
   var folder = args.folder;
@@ -87,7 +98,7 @@ Poshto.prototype._refresh = function(args) {
 }
 
 /**
- *
+ * Open a new folder & search for all mails.
  */
 Poshto.prototype.open = function(args) {
   var folder = args.folder;
@@ -106,7 +117,7 @@ Poshto.prototype.open = function(args) {
 }
 
 /**
- *
+ * Gobble up the headers and dump to the drive.
  */
 Poshto.prototype.headers = function(args) {
   var folder = args.folder,
@@ -134,7 +145,7 @@ Poshto.prototype.headers = function(args) {
 }
 
 /**
- *
+ * IMAP New mail callback
  */
 Poshto.prototype._imap_mail = function(mails) {
   this.poshto._refresh({
