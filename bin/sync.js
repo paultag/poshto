@@ -63,22 +63,21 @@ poshto.on("message", function(payload) {
           idn = root + "/" + payload.msg.id;
       headers = get_mid_path(message['message-id']);
 
-  mkdirp(headers);
+  mkdirp.sync(headers);
   headers += message['message-id'];
 
   fs.writeFile(headers, JSON.stringify(message), function(err) {
     if ( err ) {
-      console.log("Error: " + err);
+      console.log("Error (headers): " + err);
     }
+    fs.symlink(headers, idn, function(err) {
+      if ( err ) {
+        console.log("Error (link): " + err);
+        return;
+      }
+      console.log("Wrote out " + headers);
+    });
   });
-
-  fs.symlink(headers, idn, function(err) {
-    if ( err ) {
-      console.log("Error: " + err);
-      return;
-    }
-    console.log("Wrote out " + headers);
-  })
 });
 
 poshto.on("open", function(folder) {
