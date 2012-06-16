@@ -16,6 +16,10 @@ var Poshto = require("poshto").Poshto,
       port = ( settings.webserver_port ) ? settings.webserver_port : 3000,
     poshto = Poshto(settings);
 
+/* poshto.imap.debug = function(args) {
+  console.log(args);
+}; */
+
 function get_folder_folder(folder) {
   return cache + "folders/" + folder.name + "/" + folder.validity;
 }

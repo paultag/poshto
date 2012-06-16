@@ -18,7 +18,7 @@ function do_callback(args, err, payload) {
   if ( args.failure && err ) {
     return args.failure(err);
   }
-  if ( args.success && payload ) {
+  if ( args.success ) {
     return args.success(payload);
   }
 }
