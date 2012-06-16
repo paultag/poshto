@@ -1,0 +1,35 @@
+{
+    "author": {
+        "email": "paultag@ubuntu.com",
+        "name": "Paul Tagliamonte <paultag@ubuntu.com>"
+    },
+    "bugs": {
+        "url": "http://github.com/paultag/poshto/issues"
+    },
+    "dependencies": {
+        "simplesets": ">=0"
+    },
+    "description": "Sanity is slowly being restored to Email.",
+    "devDependencies": {
+    },
+    "engines": {
+        "node": "~0.6.13"
+    },
+    "homepage": "http://github.com/paultag/poshto/issues",
+    "keywords": [],
+    "licenses": [
+        {
+            "type": "Expat",
+            "url": "https://github.com/paultag/poshto/blob/master/LICENSE"
+        }
+    ],
+    "main": "poshto/index.js",
+    "name": "poshto",
+    "repository": {
+        "type": "git",
+        "url": "git://github.com/paultag/poshto.git"
+    },
+    "scripts": {
+    },
+    "version": "0.1"
+}
