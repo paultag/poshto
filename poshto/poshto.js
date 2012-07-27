@@ -6,6 +6,7 @@
 
 var        util = require("util"),
          events = require("events"),
+         moment = require('moment'),
  ImapConnection = require('imap').ImapConnection;
 
 /**
@@ -99,8 +100,14 @@ Poshto.prototype.connect = function(args) {
  * we find.
  */
 Poshto.prototype._refresh = function(args) {
-  var folder = args.folder;
-  this.imap.search(["ALL"], function(err, messages) {
+  var folder = args.folder,
+       since = moment()
+
+  since.subtract('years', 1);
+
+  this.imap.search([['OR', 'UNSEEN', [
+      'SINCE', since.format("MMMM dddd, YYYY")
+  ]]], function(err, messages) {
     if ( err ) {
       return do_callback(args, err, undefined);
     }

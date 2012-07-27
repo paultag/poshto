@@ -1,3 +1,5 @@
+#!/usr/bin/env nodejs
+
 /* sync.js, part of the poŝto suite.
  *
  * Copyright (c) Paul Tagliamonte <tag@pault.ag>, 2012 under the terms and
@@ -48,7 +50,7 @@ poshto.connect({
       /* We don't declare a success callback, since we can just use the
        * emited event down below. Then we can just kick off open commands later
        * and not have to re-implement. */
-      "folder": "INBOX"
+      "folder": "[Gmail]/All Mail"
     });
   },
   "failure": function(err) {

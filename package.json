@@ -7,9 +7,10 @@
         "url": "http://github.com/paultag/poshto/issues"
     },
     "dependencies": {
-        "simplesets": ">=0",
+        "imap": ">=0",
         "mkdirp": ">=0",
-        "imap": ">=0"
+        "moment": ">=0",
+        "simplesets": ">=0"
     },
     "description": "Sanity is slowly being restored to Email.",
     "devDependencies": {},
