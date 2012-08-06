@@ -104,6 +104,8 @@ function cleanup(args) {
       exists;
 
   exists = new sets.Set(fs.readdirSync(folder_path));
+  /* XXX: This is now wrong. Fixme */
+
   to_delete = (exists.difference(mails).array());
   to_create = (mails.difference(exists).array());
 
