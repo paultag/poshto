@@ -101,10 +101,20 @@ function cleanup(args) {
       to_create,
       folder_path = args.folder_path,
       mails = args.mails,
-      exists;
+      exists,
+      fldrs;
 
-  exists = new sets.Set(fs.readdirSync(folder_path));
-  /* XXX: This is now wrong. Fixme */
+  exists = new sets.Set([]);
+  fldrs = fs.readdirSync(folder_path);
+
+  console.log("Update check running.");
+
+  for ( i in fldrs ) {
+    var tmp = fs.readdirSync(folder_path + "/" + fldrs[i]);
+    for ( x in tmp ) {
+      exists.add(tmp[x]);
+    }
+  }
 
   to_delete = (exists.difference(mails).array());
   to_create = (mails.difference(exists).array());
@@ -113,8 +123,11 @@ function cleanup(args) {
     var file_id = to_delete[i],
            file = folder_path + "/" + get_folder_class(parseInt(file_id)) +
                   "/" + file_id;
+    console.log("Removed: " + file);
     fs.unlink(file);
   }
+
+  console.log("Update check complete.");
 
   return {
     "to_create": to_create,
