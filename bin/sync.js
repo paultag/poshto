@@ -26,6 +26,13 @@ function get_folder_folder(folder) {
   return cache + "folders/" + folder.name + "/" + folder.validity;
 }
 
+function get_folder_class(idno) {
+  var id = parseInt(idno),
+    sort = 1000,
+     ret = Math.floor(id / sort);
+  return ret;
+}
+
 function get_mid_hash(message_id) {
   var path = "",
      depth = 4;
@@ -62,10 +69,14 @@ poshto.on("message", function(payload) {
   var message = payload.msg.headers,
        folder = payload.folder,
          root = get_folder_folder(folder),
-          idn = root + "/" + payload.msg.id;
+          idn = root + "/" +
+                get_folder_class(payload.msg.id) + "/" +
+                payload.msg.id,
       headers = get_mid_path(message['message-id']);
 
   mkdirp.sync(headers);
+  mkdirp.sync(root + "/" + get_folder_class(payload.msg.id));
+
   headers += message['message-id'].replace(/\//g, "-");
 
   try {
@@ -98,7 +109,8 @@ function cleanup(args) {
 
   for ( i in to_delete ) {
     var file_id = to_delete[i],
-           file = folder_path + "/" + file_id;
+           file = folder_path + "/" + get_folder_class(parseInt(file_id)) +
+                  "/" + file_id;
     fs.unlink(file);
   }
 
